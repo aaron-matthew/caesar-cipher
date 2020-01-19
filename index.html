@@ -4,12 +4,66 @@ layout: default
 <head>
     <title>My first Vue app</title>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js"></script>
+    <script>
+     function improved_caesar_cipher(text, key, encrypt) {
+         var rng = new Math.seedrandom(key);
+         var encrypted = "";
+
+         // use ASCII chars 32 - 126 (95 chars)
+         for (var i = 0; i < text.length; i++) {
+             var c = text.charCodeAt(i);
+             var rn = Math.floor(rng() * 95);
+             var code;
+             
+             if (encrypt) {
+                 code = (c - 32 + rn) % 95 + 32;
+             } else {
+                 var rshift = 95 + (-rn % 95);
+                 code = (c - 32 + rshift) % 95 + 32;
+             }
+             encrypted += String.fromCharCode(code);
+         }
+         return encrypted;
+     }
+
+     function caesar_cipher(text, key) {
+         var encrypted = "";
+         var rshift = 0;
+
+         // Check if negative
+         if (key < 0) {
+             rshift = 26 + (key % 26); // Convert to positive shift
+         } else {
+             rshift = key;
+         }
+         
+         for (var i = 0; i < text.length; i++) {
+             var c = text.charCodeAt(i);
+
+             if (65 <= c && c <= 90) { // Check for uppercase 
+                 encrypted += String.fromCharCode((c - 65 + rshift) % 26 + 65);
+             } else if (97 <= c && c <= 122) { // Check for lowercase
+                 encrypted += String.fromCharCode((c - 97 + rshift) % 26 + 97);
+             } else { // Everything else, just return it
+                 encrypted += text.charAt(i);
+             }
+         }
+         return encrypted;
+     }
+
+     function decrypt_caesar_cipher(text, key) {
+         return caesar_cipher(text, -key);
+     }
+    </script>
 </head>
 <body>
+    <h1>Test</h1>
     <div id="app">
         {{ message }}
     </div>
 
+    <h1>Test2</h1>
     <div id="app-2">
         <span v-bind:title="message">
             Hover your mouse over me for a few seconds
@@ -21,7 +75,7 @@ layout: default
      var app = new Vue({
          el: '#app',
          data: {
-             message: 'Hello Vue!'
+             message: improved_caesar_cipher('my text is a long paraAliquam erat volutpat.  Nunc eleifend leo vitae magna.  In id erat non orci commodo lobortis.  Proin neque massa, cursus ut, gravida ut, lobortis eget, lacus.  Sed diam.  Praesent fermentum tempor tellus.  Nullam tempus.  Mauris ac felis vel velit tristique imperdiet.  Donec at pede.  Etiam vel neque nec dui dignissim bibendum.  Vivamus id enim.  Phasellus neque orci, porta a, aliquet quis, semper a, massa.  Phasellus purus.  Pellentesque tristique imperdiet tortor.  Nam euismod tellus id erat.', 'key', true)
          }
      })
 
