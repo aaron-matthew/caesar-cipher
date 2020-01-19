@@ -60,7 +60,7 @@ layout: default
 <body>
     <h1>Test</h1>
     <div id="app">
-        <h2> {{ message }} </h2>
+        <h2> (( message )) </h2>
     </div>
 
     <h1>Test2</h1>
@@ -73,6 +73,7 @@ layout: default
 
     <script>
      var app = new Vue({
+         delimeters: ["((", "))"],
          el: '#app',
          data: {
              message: 'Do you see me?'
