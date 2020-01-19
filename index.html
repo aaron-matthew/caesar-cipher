@@ -82,7 +82,7 @@ layout: default
      var app2 = new Vue({
          el: '#app-2',
          data: {
-             message: 'You loaded this page on ' + new Date().toLocaleString()
+             message: 'Encrypted: ' + improved_caesar_cipher('This is my text', 'key', true)
          }
      })
     </script>
