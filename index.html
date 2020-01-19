@@ -3,7 +3,7 @@ layout: default
 ---
 <head>
     <title>My first Vue app</title>
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js"></script>
 
     <script>
@@ -61,9 +61,10 @@ layout: default
 <body>
     <div id="app">
         <div style="border: 3px solid black ; padding: 10px ; text-align: center">
-            Enter a message you want to encrypt then enter a number for the <i>Caesar Cipher</i> encryption or any
-            characters for the <i>Improved Cipher</i> encryption. Then click either of the <b>encrypt</b> buttons to encode your message.<p>
-            <textarea rows="5" width:auto v-model="message" placeholder="Type your secret message here."></textarea><br><p></p>
+            Replace the message below with your own or leave the default on in the box. Next enter a number for the <i>Caesar Cipher</i> encryption or any
+            combination of characters for the <i>Improved Cipher</i> encryption and click either <b>encrypt</b> buttons to encode your message. Try
+            mixing keys and encryption methods to see what happens.<p>
+            <textarea rows="5" v-model="message"></textarea><br><p></p>
             <input v-on:change="validateinput" v-model="caesarkey" placeholder="Caesar key"><br>
             <button v-on:click="encryptCaesar">Caesar Encrypt</button><p></p>
             <input v-model="improvekey" placeholder="Improved key"><br>
@@ -72,7 +73,7 @@ layout: default
         <p></p>
         <div style="border: 3px solid black ; padding: 10px ; text-align: center">
             <h4>Caesar Cipher encryption result:</h4>
-            <p><h3>((encryptedText))</h3></p>
+            <p><b>((encryptedText))</b></p>
         </div>
         <p></p>
         <div style="border: 3px solid black ; padding: 10px ; text-align: center">
@@ -80,7 +81,7 @@ layout: default
             <button v-on:click="decryptCaesar">Caesar Decrypt</button>
             <button v-on:click="decryptImproved">Improved Decrypt</button>
             <h4>Decryption result:</h4>
-            <p><h3>((decryptedText))</h3></p>
+            <p><b>((decryptedText))</b></p>
         </div>
     </div>
 
@@ -89,7 +90,7 @@ layout: default
          delimiters: ['((', '))'],
          el: '#app',
          data: {
-             message: '',
+             message: 'Replace this text with your own secret message or just use this one.',
              caesarkey: '',
              improvekey: '',
              encryptedText: '',
@@ -97,21 +98,27 @@ layout: default
          },
          methods: {
              encryptCaesar: function () {
-                 this.encryptedText = caesar_cipher(this.message, this.caesarkey)
+                 if (this.caesarkey != '') 
+                     this.encryptedText = caesar_cipher(this.message, this.caesarkey)
              },
              encryptImproved: function () {
-                 this.encryptedText = improved_caesar_cipher(this.message, this.improvekey, true)
+                 if (this.improvekey != '') 
+                     this.encryptedText = improved_caesar_cipher(this.message, this.improvekey, true)
              },
              decryptCaesar: function () {
-                 this.decryptedText = decrypt_caesar_cipher(this.encryptedText, this.caesarkey)
+                 if (this.caesarkey != '') 
+                     this.decryptedText = decrypt_caesar_cipher(this.encryptedText, this.caesarkey)
              },
              decryptImproved: function () {
-                 this.decryptedText = improved_caesar_cipher(this.encryptedText, this.improvekey, false)
+                 if (this.improvekey != '') 
+                     this.decryptedText = improved_caesar_cipher(this.encryptedText, this.improvekey, false)
              },
              validateinput: function () {
-                 let val = this.caesarkey;
+                 let val = Number(this.caesarkey);
                  if (val.isNAN || !Number.isInteger(val)) {
                      this.caesarkey = '';
+                 } else {
+                     this.caesarkey = val;
                  }
              }
          }
