@@ -61,18 +61,19 @@ layout: default
 <body>
     <div id="app">
         <div style="border: 3px solid black ; padding: 10px ; text-align: center">
-            Replace the message below with your own or leave the default on in the box. Next enter a number for the <i>Caesar Cipher</i> encryption or any
+            Replace the message below with your own or use the one in the box. Next enter an integer for the <i>Caesar Cipher</i> encryption or any
             combination of characters for the <i>Improved Cipher</i> encryption and click either <b>encrypt</b> buttons to encode your message. Try
             mixing keys and encryption methods to see what happens.<p>
             <textarea rows="5" v-model="message"></textarea><br><p></p>
+            <span style="color: red ; font-size: 75%"><i>((errorMsg))</i></span><br>
             <input v-on:change="validateinput" v-model="caesarkey" placeholder="Caesar key"><br>
-            <button v-on:click="encryptCaesar">Caesar Encrypt</button><p></p>
+            <button v-on:click="encryptCaesar" style="margin: 5px">caesar Encrypt</button><p></p>
             <input v-model="improvekey" placeholder="Improved key"><br>
-            <button v-on:click="encryptImproved">Improved Cipher</button>
+            <button v-on:click="encryptImproved" style="margin: 5px">Improved Cipher</button>
         </div>
         <p></p>
         <div style="border: 3px solid black ; padding: 10px ; text-align: center">
-            <h4>Caesar Cipher encryption result:</h4>
+            <h4>Encryption result: <span style="color: blue">((encryptStyle))</span></h4>
             <p><b>((encryptedText))</b></p>
         </div>
         <p></p>
@@ -80,7 +81,7 @@ layout: default
             <p>Decrypt the hidden message using the key you entered above.</p>
             <button v-on:click="decryptCaesar">Caesar Decrypt</button>
             <button v-on:click="decryptImproved">Improved Decrypt</button>
-            <h4>Decryption result:</h4>
+            <h4>Decryption result: <span style="color: blue">((decryptStyle))</span></h4>
             <p><b>((decryptedText))</b></p>
         </div>
     </div>
@@ -94,31 +95,44 @@ layout: default
              caesarkey: '',
              improvekey: '',
              encryptedText: '',
-             decryptedText: ''
+             decryptedText: '',
+             errorMsg: '',
+             encryptStyle: '',
+             decryptStyle: ''
          },
          methods: {
              encryptCaesar: function () {
-                 if (this.caesarkey != '') 
-                     this.encryptedText = caesar_cipher(this.message, this.caesarkey)
+                 if (this.caesarkey != '') {
+                     this.encryptedText = caesar_cipher(this.message, this.caesarkey);
+                     this.encryptStyle = 'Caesar Cipher';
+                 }
              },
              encryptImproved: function () {
-                 if (this.improvekey != '') 
-                     this.encryptedText = improved_caesar_cipher(this.message, this.improvekey, true)
+                 if (this.improvekey != '') {
+                     this.encryptedText = improved_caesar_cipher(this.message, this.improvekey, true);
+                     this.encryptStyle = 'Improved Cipher';
+                 }
              },
              decryptCaesar: function () {
-                 if (this.caesarkey != '') 
-                     this.decryptedText = decrypt_caesar_cipher(this.encryptedText, this.caesarkey)
+                 if (this.caesarkey != '') {
+                     this.decryptedText = decrypt_caesar_cipher(this.encryptedText, this.caesarkey);
+                     this.decryptStyle = 'Caesar Cipher';
+                 }
              },
              decryptImproved: function () {
-                 if (this.improvekey != '') 
-                     this.decryptedText = improved_caesar_cipher(this.encryptedText, this.improvekey, false)
+                 if (this.improvekey != '') {
+                     this.decryptedText = improved_caesar_cipher(this.encryptedText, this.improvekey, false);
+                     this.decryptStyle = 'Improved Cipher';
+                 }
              },
              validateinput: function () {
                  let val = Number(this.caesarkey);
                  if (val.isNAN || !Number.isInteger(val)) {
                      this.caesarkey = '';
+                     this.errorMsg = 'Only integers can be a valid key for the Caesar cipher.';
                  } else {
                      this.caesarkey = val;
+                     this.errorMsg = '';
                  }
              }
          }
