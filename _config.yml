@@ -1,3 +1,4 @@
 theme: jekyll-theme-cayman
-name: An Improved Caesar Cipher
-title: null
+title: An Improved Caesar Cipher
+description: By Aaron Chan
+show_donwloads: false
