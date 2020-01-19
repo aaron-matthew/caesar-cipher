@@ -60,18 +60,25 @@ layout: default
 </head>
 <body>
     <div id="app">
-        <div style="background-color: #999 ; padding: 10px ; text-align: center">
-            <textarea rows="5" width:auto v-model="message" placeholder="Enter your secret message"></textarea>
-            <p><button v-on:click="encryptMessage" v-bind:title="encryptbutton">Encrypt Cipher</button>
-                <button v-on:click="decryptMessage">Decrypt Message</button> </p>
+        <div style="border: 3px solid black ; padding: 10px ; text-align: center">
+            Enter a message you want to encrypt then enter a number for the <i>Caesar Cipher</i> encryption or any
+            characters for the <i>Improved Cipher</i> encryption. Then click either of the <b>encrypt</b> buttons to encode your message.<p>
+            <textarea rows="5" width:auto v-model="message" placeholder="Type your secret message here."></textarea><br><p></p>
+            <input v-on:change="validateinput" v-model="caesarkey" placeholder="Caesar key"><br>
+            <button v-on:click="encryptCaesar">Caesar Encrypt</button><p></p>
+            <input v-model="improvekey" placeholder="Improved key"><br>
+            <button v-on:click="encryptImproved">Improved Cipher</button>
         </div>
         <p></p>
-        <div style="background-color: #999 ; padding: 10px">
+        <div style="border: 3px solid black ; padding: 10px ; text-align: center">
             <h4>Caesar Cipher encryption result:</h4>
             <p><h3>((encryptedText))</h3></p>
         </div>
         <p></p>
-        <div style="background-color: #999 ; padding: 10px">
+        <div style="border: 3px solid black ; padding: 10px ; text-align: center">
+            <p>Decrypt the hidden message using the key you entered above.</p>
+            <button v-on:click="decryptCaesar">Caesar Decrypt</button>
+            <button v-on:click="decryptImproved">Improved Decrypt</button>
             <h4>Decryption result:</h4>
             <p><h3>((decryptedText))</h3></p>
         </div>
@@ -83,16 +90,29 @@ layout: default
          el: '#app',
          data: {
              message: '',
-             encryptbutton: 'Click on me to do something',
+             caesarkey: '',
+             improvekey: '',
              encryptedText: '',
              decryptedText: ''
          },
          methods: {
-             encryptMessage: function () {
-                 this.encryptedText = improved_caesar_cipher(this.message, 'secret', true)
+             encryptCaesar: function () {
+                 this.encryptedText = caesar_cipher(this.message, this.caesarkey)
              },
-             decryptMessage: function () {
-                 this.decryptedText = improved_caesar_cipher(this.encryptedText, 'secret', false)
+             encryptImproved: function () {
+                 this.encryptedText = improved_caesar_cipher(this.message, this.improvekey, true)
+             },
+             decryptCaesar: function () {
+                 this.decryptedText = decrypt_caesar_cipher(this.encryptedText, this.caesarkey)
+             },
+             decryptImproved: function () {
+                 this.decryptedText = improved_caesar_cipher(this.encryptedText, this.improvekey, false)
+             },
+             validateinput: function () {
+                 let val = this.caesarkey;
+                 if (val.isNAN || !Number.isInteger(val)) {
+                     this.caesarkey = '';
+                 }
              }
          }
      })
